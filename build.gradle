@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id "com.commercehub.gradle.plugin.avro" version "0.9.1"
+}
+
+group 'haken'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.11
+
+ext {
+    avroVersion = '1.8.2'
+    avro4sVersion = "1.6.2"
+    apacheDirectoryVersion = "2.0.0-M24"
+    confluentVersion = "5.1.2"
+}
+
+
+repositories {
+    mavenCentral()
+    maven { url "http://packages.confluent.io/maven/" }
+}
+
+dependencies {
+    compile("org.apache.avro:avro:$avroVersion")
+
+    compile("io.confluent:kafka-schema-registry:$confluentVersion")
+    compile("io.confluent:kafka-schema-registry-client:$confluentVersion") {
+        exclude group: "com.fasterxml.jackson.core"
+        exclude group: "jackson-databind"
+    }
+    compile("io.confluent:kafka-avro-serializer:$confluentVersion")
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+avro {
+//    createSetters = false
+    fieldVisibility = "PRIVATE"
+}
